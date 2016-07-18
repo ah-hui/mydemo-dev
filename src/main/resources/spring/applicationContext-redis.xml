@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+	<!-- 引入dbconfig.properties属性文件 - import此配置的配置已引入 -->
+	<context:property-placeholder location="classpath:config.properties" />
+
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+	</bean>
+
+	<!--这里添加的是Redis，因为使用的是Spring里自带的Redis的Session策略 -->
+	<bean id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<!-- <constructor-arg ref="redisSentinelConfiguration" /> -->
+		<property name="hostName" value="${redis.ip}" />
+		<property name="port" value="${redis.port}" />
+		<property name="usePool" value="true" />
+		<property name="database" value="${redis.db}" />
+		<property name="poolConfig">
+			<bean class="redis.clients.jedis.JedisPoolConfig">
+				<property name="maxIdle" value="999" />
+				<property name="maxTotal" value="9999" />
+				<property name="minIdle" value="20" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="jedisConnectionFactory" />
+	</bean>
+
+	<!-- 这里的是为了下面的 Session策略过滤器提供构造函数传入的参数，因为Session过滤器要依赖该对象来构造，所以创建一个先 -->
+	<bean name="redisOperationsSessionRepository"
+		class="org.springframework.session.data.redis.RedisOperationsSessionRepository">
+		<constructor-arg ref="jedisConnectionFactory"></constructor-arg>
+	</bean>
+
+	<!-- Spring的 Redis持久化Session机制 - 注意,名字与 web.xml里的targetBean的下value要一致 -->
+	<bean name="springSession"
+		class="org.springframework.session.web.http.SessionRepositoryFilter">
+		<constructor-arg ref="redisOperationsSessionRepository" />
+		<!-- <property name="httpSessionStrategy" ref="cookieHttpSessionStrategy" 
+			/> -->
+	</bean>
+
+</beans>
