@@ -14,10 +14,43 @@
 	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
 	</bean>
 
+	<bean id="redisSentinelConfiguration"
+		class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
+		<property name="master">
+			<bean class="org.springframework.data.redis.connection.RedisNode">
+				<property name="name" value="mymaster" />
+			</bean>
+		</property>
+		<property name="sentinels">
+			<set>
+				<bean class="org.springframework.data.redis.connection.RedisNode">
+					<constructor-arg name="host" value="${redis.node1.ip}" />
+					<constructor-arg name="port"
+						value="${redis.node1.sentinels.port}" />
+				</bean>
+				<bean class="org.springframework.data.redis.connection.RedisNode">
+					<constructor-arg name="host" value="${redis.node2.ip}" />
+					<constructor-arg name="port"
+						value="${redis.node2.sentinels.port}" />
+				</bean>
+				<bean class="org.springframework.data.redis.connection.RedisNode">
+					<constructor-arg name="host" value="${redis.node3.ip}" />
+					<constructor-arg name="port"
+						value="${redis.node3.sentinels.port}" />
+				</bean>
+				<bean class="org.springframework.data.redis.connection.RedisNode">
+					<constructor-arg name="host" value="${redis.node4.ip}" />
+					<constructor-arg name="port"
+						value="${redis.node4.sentinels.port}" />
+				</bean>
+			</set>
+		</property>
+	</bean>
+
 	<!--这里添加的是Redis，因为使用的是Spring里自带的Redis的Session策略 -->
 	<bean id="jedisConnectionFactory"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-		<!-- <constructor-arg ref="redisSentinelConfiguration" /> -->
+        <!-- <constructor-arg ref="redisSentinelConfiguration" /> -->
 		<property name="hostName" value="${redis.ip}" />
 		<property name="port" value="${redis.port}" />
 		<property name="usePool" value="true" />

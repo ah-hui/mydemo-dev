@@ -129,7 +129,7 @@
 	
 
 	/**
-	 * 查询
+	 * 初始化删除模块数据
 	 * @param rows 查询出的行数据
 	 */
 	function initDelete(rows) {
@@ -142,9 +142,9 @@
 		}
 	}
 	
-	   /**
-     * 查询
-     * @param rows 查询出的行数据
+	/**
+     * 单条删除
+     * @param id 要删除user的pk
      */
     function deleteUser(id) {
         if (conn && conn.readyState != 4)//防止狂点发多次请求
@@ -164,6 +164,47 @@
             }
         });
     }
+	
+
+	/**
+	 * 批量删除
+	 */
+	function batchDelete() {
+        if (conn && conn.readyState != 4)//防止狂点发多次请求
+            return;
+		var ids = getChecked();
+		var arr = [];
+		for(var i=0; i<ids.length; i++){
+			arr.push({"id":ids[i]});//传到后台时会自动类型转换
+			//arr.push({"id":parseInt(ids[i])});
+		}
+		conn = $.ajax({
+			url : "user/batchDelete",
+			type : "POST",
+			dataType : "json",
+			contentType : "application/json; charset=utf-8",
+			data : JSON.stringify(arr),
+			success : function(data) {
+				if (data.success) {
+					alert("操作成功！");
+					location.reload(true);
+				}
+			}
+		});
+	}
+	/**
+	 * 查询所有勾选的checkbox
+	 */
+	function getChecked() {
+		var arr = [];
+		//$("input[name='userToDelete']").eq(0).prop("checked")
+		$("input[name='userToDelete']").each(function() {
+			if ($(this).prop("checked")) {
+				arr.push($(this).val());
+			}
+		});
+		return arr;
+	}
 </script>
 <!-- ========== FOOTER START ========== -->
 <#include "/demo/include/footer.html">
