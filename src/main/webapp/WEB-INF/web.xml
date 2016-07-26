@@ -7,15 +7,28 @@
 	<display-name>demo</display-name>
 	<description>springmvc-demo</description>
 
+    <!-- 设置Spring容器加载配置文件路径 -->
+    <!-- 包含 Spring Security Configuration File -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:/spring/applicationContext*.xml</param-value>
+    </context-param>
+
 	<!-- 加载spring容器配置 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	<!-- 设置Spring容器加载配置文件路径 -->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:/spring/applicationContext*.xml</param-value>
-	</context-param>
+
+	<!-- Spring Security Filter -->
+	<!-- used for intercepting the HTTP requests and performing authentication related tasks -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- 区分项目名称，防止默认重名 -->
 	<context-param>
