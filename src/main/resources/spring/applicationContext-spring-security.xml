@@ -1,22 +1,39 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:security="http://www.springframework.org/schema/security"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
           http://www.springframework.org/schema/security
           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-   <security:http auto-config="true">
-      <security:intercept-url pattern="/**" access="ROLE_USER"/>
-   </security:http>    
+	<!-- 这样也可以放行login界面,区别是:这种方式login.html页面将不被filter过滤 -->
+	<!-- <security:http security="none" pattern="/login.html" /> -->
 
-   <security:authentication-manager>
-      <security:authentication-provider>
-         <security:user-service>
-            <security:user name="user" password="user" authorities="ROLE_USER"/>
-            <security:user name="admin" password="admin" authorities="ROLE_USER, ROLE_ADMIN"/>
-         </security:user-service>
-      </security:authentication-provider>
-   </security:authentication-manager>
+	<security:http auto-config="true">
+		<security:form-login login-page="/login.html"
+			login-processing-url="/login" username-parameter="username"
+			password-parameter="password" authentication-success-handler-ref="authSuccess"
+			authentication-failure-url="/login_failure.html" />
+		<!-- 表示匿名用户可以访问 -->
+		<!-- <security:intercept-url pattern="/login.html" -->
+		<!-- access="IS_AUTHENTICATED_ANONYMOUSLY" /> -->
+		<security:intercept-url pattern="/login*.html"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<security:intercept-url pattern="/**" access="ROLE_USER" />
+	</security:http>
+
+	<!-- 认证成功后的处理类 -->
+	<bean id="authSuccess" class="com.hand.demo.security.AuthenticationSuccessHandlerImpl" />
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user name="user" password="user"
+					authorities="ROLE_USER" />
+				<security:user name="admin" password="admin"
+					authorities="ROLE_USER, ROLE_ADMIN" />
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
 
 </beans>

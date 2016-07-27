@@ -50,6 +50,7 @@
 	<mvc:resources mapping="/fonts/**" location="/fonts/" />
 	<mvc:view-controller path="/login.html" view-name="/login" />
 	<mvc:view-controller path="/index" view-name="redirect:/index.html" />
+	<mvc:view-controller path="/" view-name="redirect:/index.html" />
 
 	<!-- freemaker配置 -->
 	<bean id="freemarkerConfig"
