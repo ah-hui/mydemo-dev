@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
           http://www.springframework.org/schema/security
-          http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+          http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
 	<!-- 这样也可以放行login界面,区别是:这种方式login.html页面将不被filter过滤 -->
 	<!-- <security:http security="none" pattern="/login.html" /> -->
@@ -14,26 +14,56 @@
 			login-processing-url="/login" username-parameter="username"
 			password-parameter="password" authentication-success-handler-ref="authSuccess"
 			authentication-failure-url="/login_failure.html" />
+		<!-- Remember Me -->
+		<security:custom-filter ref="rememberMeFilter"
+			position="REMEMBER_ME_FILTER" />
 		<!-- 表示匿名用户可以访问 -->
-		<!-- <security:intercept-url pattern="/login.html" -->
-		<!-- access="IS_AUTHENTICATED_ANONYMOUSLY" /> -->
 		<security:intercept-url pattern="/login*.html"
 			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<!-- <security:intercept-url pattern="/" access="permitAll" /> -->
 		<security:intercept-url pattern="/**" access="ROLE_USER" />
+		<security:intercept-url pattern="/admin**"
+			access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/dba**"
+			access="hasRole('ADMIN') and hasRole('DBA')" />
 	</security:http>
 
 	<!-- 认证成功后的处理类 -->
 	<bean id="authSuccess" class="com.hand.demo.security.AuthenticationSuccessHandlerImpl" />
 
 	<security:authentication-manager>
-		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="user" password="user"
-					authorities="ROLE_USER" />
-				<security:user name="admin" password="admin"
-					authorities="ROLE_USER, ROLE_ADMIN" />
-			</security:user-service>
-		</security:authentication-provider>
+		<security:authentication-provider
+			user-service-ref="customUserDetailsService" />
+		<security:authentication-provider
+			ref="rememberMeAuthenticationProvider" />
 	</security:authentication-manager>
+
+	<!-- Remember-Me 对应的 Filter -->
+	<bean id="rememberMeFilter"
+		class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+		<property name="rememberMeServices" ref="rememberMeServices" />
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+
+	<!-- RememberMeServices 的实现 -->
+	<bean id="rememberMeServices"
+		class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+		<property name="userDetailsService" ref="customUserDetailsService" />
+		<property name="key" value="security-hoshi" />
+		<!-- 指定 request 中包含的用户是否选择了记住我的参数名 -->
+		<property name="parameter" value="rememberMe" />
+		<!-- 指定 PersistentTokenRepository -->
+		<property name="tokenRepository">
+			<bean class="com.hand.demo.service.impl.PersistentTokenRepositoryImpl" />
+		</property>
+	</bean>
+
+	<!-- key 值需与对应的 RememberMeServices 保持一致 -->
+	<bean id="rememberMeAuthenticationProvider"
+		class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+		<property name="key" value="security-hoshi" />
+	</bean>
+
+	<bean id="customUserDetailsService" class="com.hand.demo.security.CustomUserDetailsService" />
 
 </beans>

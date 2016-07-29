@@ -49,4 +49,9 @@ public class UserServiceImpl implements IUserService {
     public int batchDeleteUser(List<User> users) {
         return userMapper.batchDeleteUser(users);
     }
+
+    @Override
+    public User selectBySelective(User user) {
+        return userMapper.selectBySelective(user);
+    }
 }

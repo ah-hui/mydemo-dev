@@ -30,5 +30,10 @@ public interface IUserService {
      * 根据id查询user
      */
     User selectByPrimaryKey(Long userId);
+    
+    /**
+     * 根据id查询user
+     */
+    User selectBySelective(User user);
 
 }

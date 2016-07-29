@@ -15,6 +15,8 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     User selectByPrimaryKey(Long userId);
+    
+    User selectBySelective(User user);
 
     List<User> selectUsers();
 

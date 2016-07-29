@@ -20,6 +20,22 @@
 		WHERE ID = #{id,jdbcType=DECIMAL}
 	</select>
 
+	<!-- 根据ID查询信息 -->
+	<select id="selectBySelective" resultMap="BaseResultMap"
+		parameterType="com.hand.demo.dto.User">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM MYTEST
+		<where>
+			<if test="id != null">
+				ID = #{id,jdbcType=DECIMAL},
+			</if>
+			<if test="username != null">
+				USERNAME = #{username,jdbcType=VARCHAR},
+			</if>
+		</where>
+	</select>
+
 	<!-- 查询所有信息 -->
 	<select id="selectUsers" resultMap="BaseResultMap">
 		SELECT
