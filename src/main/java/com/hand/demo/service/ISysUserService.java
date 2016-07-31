@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.hand.demo.dto.User;
 
-public interface IUserService {
+public interface ISysUserService {
 
     /**
      * 创建和更新user

@@ -6,16 +6,17 @@ package com.hand.demo.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hand.demo.dto.User;
 import com.hand.demo.mapper.UserMapper;
-import com.hand.demo.service.IUserService;
+import com.hand.demo.service.ISysUserService;
 
-@Service
+@Service("sysUserService")
 @Transactional
-public class UserServiceImpl implements IUserService {
+public class SysUserServiceImpl implements ISysUserService {
 
     @Autowired
     private UserMapper userMapper;

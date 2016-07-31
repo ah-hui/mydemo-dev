@@ -32,7 +32,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- mybatis配置文件路径 -->
-		<property name="configLocation" value="" />
+		<property name="configLocation" value="classpath:MyBatisConfig.xml" />
 		<!-- 实体类映射文件路径 -->
 		<property name="mapperLocations" value="classpath*:/**/*Mapper.xml" />
 	</bean>

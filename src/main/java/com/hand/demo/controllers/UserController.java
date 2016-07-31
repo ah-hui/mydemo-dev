@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hand.demo.constant.UserConstants;
 import com.hand.demo.dto.ResponseData;
 import com.hand.demo.dto.User;
-import com.hand.demo.service.IUserService;
+import com.hand.demo.service.ISysUserService;
 
 /**
  * @author Jessey
@@ -29,7 +29,7 @@ import com.hand.demo.service.IUserService;
 public class UserController {
 
     @Autowired
-    private IUserService userService;
+    private ISysUserService userService;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;

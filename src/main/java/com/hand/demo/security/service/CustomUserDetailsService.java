@@ -1,4 +1,4 @@
-package com.hand.demo.security;
+package com.hand.demo.security.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hand.demo.dto.User;
-import com.hand.demo.service.IUserService;
+import com.hand.demo.service.ISysUserService;
 
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
@@ -23,14 +24,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
     @Autowired
-    private IUserService userService;
+    @Qualifier("sysUserService")
+    private ISysUserService sysUserService;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User tmp = new User();
         tmp.setUsername(username);
-        User user = userService.selectBySelective(tmp);
+        User user = sysUserService.selectBySelective(tmp);
         logger.info("User : {}", user);
         if (user == null) {
             logger.info("User not found");

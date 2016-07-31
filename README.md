@@ -11,3 +11,7 @@ http 元素下的 form-login 元素是用来定义表单登录信息的。
 当我们什么属性都不指定的时候 Spring Security 会为我们生成一个默认的登录页面
 不巧,我想自己指定
 之后,还需要指定登录后的页面
+
+#T02
+1.引入spring-security ---专业地
+2.log4j输出执行sql

@@ -28,10 +28,10 @@
 		FROM MYTEST
 		<where>
 			<if test="id != null">
-				ID = #{id,jdbcType=DECIMAL},
+				ID = #{id,jdbcType=DECIMAL}
 			</if>
 			<if test="username != null">
-				USERNAME = #{username,jdbcType=VARCHAR},
+				USERNAME = #{username,jdbcType=VARCHAR}
 			</if>
 		</where>
 	</select>
