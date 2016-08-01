@@ -111,9 +111,35 @@
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
 
+<!-- ========== FOOTER START ========== -->
+<#include "/admin-lte/include/footer.html">
+
 <!-- SCRIPT-初始化 -->
 <script type="text/javascript">
 </script>
 
-<!-- ========== FOOTER START ========== -->
-<#include "/admin-lte/include/footer.html">
+<!-- SCRIPT -->
+<script type="text/javascript">
+    //登出
+    var header = "${_csrf.headerName}";
+    var token = "${_csrf.token}";
+    $("#sign-out").click(function() {
+        $.ajax({
+            type : "POST",
+            beforeSend : function(request) {
+                request.setRequestHeader(header, token);
+            },
+            url : "/demo/logout",
+            success : function(msg) {
+                // supplementary checks should be done here, but because of readability
+                // we'll prefer shorter version
+                window.location.href = "${request.getContextPath()}/demo/login.html";
+            },
+            error : function() {
+                alert("FAILURE !");
+            }
+        });
+    });
+</script>
+
+

@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head></head>
+<head>
+</head>
 <body>
 
 	<h1>Login</h1>
 
 	<form action="login" method="post">
 		<table>
+			<tr>
+				<td><input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" /></td>
+			</tr>
+
 			<tr>
 				<td>用户名lala：</td>
 				<td><input type="text" name="username" /></td>

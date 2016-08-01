@@ -7,7 +7,7 @@
           http://www.springframework.org/schema/context 
           http://www.springframework.org/schema/context/spring-context-4.0.xsd
           http://www.springframework.org/schema/security
-          http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+          http://www.springframework.org/schema/security/spring-security-4.1.xsd">
 
 	<context:annotation-config />
 	<context:component-scan base-package="**.*.service" />
@@ -35,7 +35,7 @@
 		<security:intercept-url pattern="/**"
 			access="isAuthenticated()" />
 		<!-- 登出 -->
-		<security:logout delete-cookies="JSESSIONID" />
+		<security:logout logout-url="/logout" logout-success-url="/login" invalidate-session="true" delete-cookies="JSESSIONID" />
 
 		<!-- 访问拒绝处理 -->
 		<!-- <security:access-denied-handler ref="accessDeniedHandler" /> -->
@@ -73,8 +73,8 @@
 	<!-- Filter REMEMBER_ME_FILTER -->
 	<bean id="rememberMeFilter"
 		class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
-		<property name="rememberMeServices" ref="rememberMeServices" />
-		<property name="authenticationManager" ref="authenticationManager" />
+		<constructor-arg name="rememberMeServices" ref="rememberMeServices" />
+		<constructor-arg name="authenticationManager" ref="authenticationManager" />
 	</bean>
 
 	<!-- 认证结果处理类 -->
@@ -86,22 +86,22 @@
 	<!-- RememberMeServices 的实现 -->
 	<bean id="rememberMeServices"
 		class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
-		<property name="userDetailsService" ref="customUserDetailsService" />
-		<property name="key" value="security-hoshi" />
-		<!-- 指定 request 中包含的用户是否选择了记住我的参数名 -->
-		<property name="cookieName" value="HOSHI_RMMBRM" />
-		<property name="parameter" value="remember-me" />
-		<property name="tokenValiditySeconds" value="36000" />
+		<constructor-arg name="key" value="security-hoshi" />
+		<constructor-arg name="userDetailsService" ref="customUserDetailsService" />
 		<!-- 指定 PersistentTokenRepository -->
-		<property name="tokenRepository">
+		<constructor-arg name="tokenRepository">
 			<bean class="com.hand.demo.security.service.PersistentTokenRepositoryImpl" />
-		</property>
+		</constructor-arg>
+		<!-- 指定 request 中包含的用户是否选择了记住我的参数名 -->
+		<!-- <property name="cookieName" value="HOSHI_RMMBRM" /> -->
+		<!-- <property name="parameter" value="remember-me" /> -->
+		<!-- <property name="tokenValiditySeconds" value="3600" /> -->
 	</bean>
 
 	<!-- key 值需与对应的 RememberMeServices 保持一致 -->
 	<bean id="rememberMeAuthenticationProvider"
 		class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
-		<property name="key" value="security-hoshi" />
+		<constructor-arg name="key" value="security-hoshi" />
 	</bean>
 
 </beans>
