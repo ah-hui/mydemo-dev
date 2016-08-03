@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.demo.mapper.PersistentLoginMapper">
+	<resultMap id="BaseResultMap" type="com.hand.demo.dto.PersistentLogin">
+		<id column="SERIES" property="series" jdbcType="VARCHAR" />
+		<result column="USERNAME" property="username" jdbcType="VARCHAR" />
+		<result column="TOKEN" property="token" jdbcType="VARCHAR" />
+		<result column="LAST_USED" property="last_used" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		SERIES, USERNAME, TOKEN, LAST_USED
+	</sql>
+
+	<!-- 根据SERIES查询信息 -->
+	<select id="select" resultMap="BaseResultMap"
+		parameterType="com.hand.demo.dto.PersistentLogin">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM PERSISTENT_LOGINS
+		WHERE SERIES = #{series,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 添加用户信息 -->
+	<insert id="persist" parameterType="com.hand.demo.dto.PersistentLogin">
+		insert into PERSISTENT_LOGINS
+		(SERIES,
+		USERNAME, TOKEN, LAST_USED)
+		values
+		(#{series,jdbcType=VARCHAR},
+		#{username,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR},
+		#{last_used,jdbcType=TIMESTAMP})
+	</insert>
+
+	<!-- 删除用户信息 -->
+	<delete id="delete" parameterType="com.hand.demo.dto.PersistentLogin">
+		delete from PERSISTENT_LOGINS
+		where SERIES
+		= #{series,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 更新用户信息 -->
+	<update id="update" parameterType="com.hand.demo.dto.PersistentLogin">
+		update PERSISTENT_LOGINS
+		<set>
+			<if test="token != null">
+				TOKEN = #{token,jdbcType=VARCHAR},
+			</if>
+			<if test="last_used != null">
+				LAST_USED = #{last_used,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where SERIES = #{series,jdbcType=VARCHAR}
+	</update>
+</mapper>
