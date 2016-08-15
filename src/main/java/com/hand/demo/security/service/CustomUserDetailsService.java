@@ -31,15 +31,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User tmp = new User();
-        tmp.setUsername(username);
+        tmp.setLoginName(username);
         User user = sysUserService.selectBySelective(tmp);
         logger.info("User : {}", user);
         if (user == null) {
             logger.info("User not found");
             throw new UsernameNotFoundException("Username not found");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true,
-                true, true, true, getGrantedAuthorities(user));
+        return new org.springframework.security.core.userdetails.User(user.getLoginName(), user.getHashedPassword(), user.isEnabled(),
+                !user.isAccountExpired(), !user.isPasswordExpired(), !user.isAccountLocked(), getGrantedAuthorities(user));
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(User user) {

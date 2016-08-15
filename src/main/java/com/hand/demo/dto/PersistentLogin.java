@@ -1,10 +1,13 @@
 package com.hand.demo.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
-public class PersistentLogin {
+public class PersistentLogin implements Serializable {
+
+    private static final long serialVersionUID = 8154922296754586639L;
 
     @NotNull
     private String series;

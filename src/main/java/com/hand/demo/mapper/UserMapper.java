@@ -9,15 +9,17 @@ public interface UserMapper {
     int insertUser(User record);
 
     int deleteUser(Long userId);
-    
+
     int batchDeleteUser(List<User> users);
 
     int updateByPrimaryKeySelective(User record);
 
     User selectByPrimaryKey(Long userId);
-    
+
     User selectBySelective(User user);
 
     List<User> selectUsers();
+
+    int updatePassword(User user);
 
 }

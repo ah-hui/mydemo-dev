@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
@@ -17,37 +18,29 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
 
     private final static Logger logger = LoggerFactory.getLogger(AuthenticationFailureHandlerImpl.class);
 
-//    private final RequestCache requestCache;
+    private final RequestCache requestCache;
 
-//    public AuthenticationFailureHandlerImpl(RequestCache requestCache) {
-//        super();
-//        this.requestCache = requestCache;
-//    }
-    
     public AuthenticationFailureHandlerImpl() {
-        super();
+        this.requestCache = new HttpSessionRequestCache();
     }
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authenticationException) throws IOException, ServletException {
-//        SavedRequest savedRequest = requestCache.getRequest(request, response);
+        // 登录之前请求的时候，在过滤器链的最后，会发现没有登录，抛出异常，这时候会将当前的request放到HttpSessionRequestCache中
+        // 所以,当[1.请求前未登录;2.请求的地址不是登录地址]时,savedRequest不为空
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
 
-//        logger.debug("saved Request: {}", savedRequest);
+        logger.debug("saved Request: {}", savedRequest);
+        logger.warn("Authn Failure.", authenticationException);
 
-        // if (authenticationException instanceof
-        // IdentityProviderAuthenticationException && savedRequest != null) {
-        //
-        // logger.warn("Authn Failure reported by the IDP.",
-        // authenticationException);
-        // logger.debug("Retry original request of {}",
-        // savedRequest.getRedirectUrl());
-//        response.sendRedirect(savedRequest.getRedirectUrl());
-        // } else {
-        // logger.warn("Unrecoverable authn failure. Sending to Forbidden",
-        // authenticationException);
-        // response.sendError(HttpServletResponse.SC_FORBIDDEN);
-        // }
+        if (savedRequest != null) {
+            logger.debug("Retry original request of {}", savedRequest.getRedirectUrl());
+            response.sendRedirect(savedRequest.getRedirectUrl());
+        } else {
+            logger.debug("Retry login {}", "/demo/login.html");
+            response.sendRedirect("/demo/login.html");
+        }
     }
 
 }

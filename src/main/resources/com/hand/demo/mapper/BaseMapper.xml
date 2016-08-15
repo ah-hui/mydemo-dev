@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.demo.mapper.BaseMapper">
+    <resultMap id="STD" type="com.hand.demo.dto.BaseDTO">
+        <result column="VERSION" property="version" jdbcType="DECIMAL"/>
+        <result column="CREATION_DATE" property="creationDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="DECIMAL"/>
+        <result column="LAST_UPDATED_BY" property="lastUpdatedBy" jdbcType="DECIMAL"/>
+        <result column="LAST_UPDATE_DATE" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="BaseDto_Column_List">
+        VERSION, CREATION_DATE, CREATED_BY, LAST_UPDATED_BY, LAST_UPDATE_DATE
+    </sql>
+</mapper>

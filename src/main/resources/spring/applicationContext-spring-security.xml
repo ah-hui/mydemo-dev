@@ -35,7 +35,8 @@
 		<security:intercept-url pattern="/**"
 			access="isAuthenticated()" />
 		<!-- 登出 -->
-		<security:logout logout-url="/logout" logout-success-url="/login" invalidate-session="true" delete-cookies="JSESSIONID" />
+		<security:logout logout-url="/logout"
+			logout-success-url="/login" invalidate-session="true" delete-cookies="JSESSIONID" />
 
 		<!-- 访问拒绝处理 -->
 		<!-- <security:access-denied-handler ref="accessDeniedHandler" /> -->
@@ -49,12 +50,21 @@
 
 	<security:authentication-manager alias="authenticationManager">
 		<security:authentication-provider
-			user-service-ref="customUserDetailsService" />
+			user-service-ref="customUserDetailsService">
+			<security:password-encoder ref="passwordEncoder">
+				<security:salt-source system-wide="hoshi" />
+			</security:password-encoder>
+		</security:authentication-provider>
 		<security:authentication-provider
 			ref="rememberMeAuthenticationProvider" />
 	</security:authentication-manager>
 
+    <!-- 自定义认证实现类 -->
 	<bean id="customUserDetailsService" class="com.hand.demo.security.service.CustomUserDetailsService" />
+
+	<!-- 加密 -->
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
 
 	<!-- Filter FORM_LOGIN_FILTER -->
 	<bean id="usernamePasswordAuthenticationFilter"
@@ -93,9 +103,9 @@
 			<bean class="com.hand.demo.security.service.PersistentTokenRepositoryImpl" />
 		</constructor-arg>
 		<!-- 指定 request 中包含的用户是否选择了记住我的参数名 -->
-		<!-- <property name="cookieName" value="HOSHI_RMMBRM" /> -->
-		<!-- <property name="parameter" value="remember-me" /> -->
-		<!-- <property name="tokenValiditySeconds" value="3600" /> -->
+		<property name="cookieName" value="HOSHI_RMMBRM" />
+		<property name="parameter" value="rmmbrm-hoshi" />
+		<property name="tokenValiditySeconds" value="3600" />
 	</bean>
 
 	<!-- key 值需与对应的 RememberMeServices 保持一致 -->

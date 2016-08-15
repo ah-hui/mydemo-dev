@@ -60,5 +60,11 @@
 	<!-- 添加事务的控制 -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
+	<!-- 密码加密 -->
+	<bean id="passwordManager" class="com.hand.demo.security.PasswordManager">
+		<property name="salt" value="infinitus" />
+		<property name="defaultPassword" value="111111" />
+	</bean>
+
 </beans>
 

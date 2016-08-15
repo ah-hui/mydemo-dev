@@ -35,5 +35,10 @@ public interface ISysUserService {
      * 根据id查询user
      */
     User selectBySelective(User user);
+    
+    /**
+     * 修改密码
+     */
+    int updatePassword(User user);
 
 }

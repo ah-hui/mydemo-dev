@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hand.demo.mapper.UserMapper">
-	<resultMap id="BaseResultMap" type="com.hand.demo.dto.User">
+	<resultMap id="BaseResultMap" type="com.hand.demo.dto.User" extends="com.hand.demo.mapper.BaseMapper.STD">
 		<id column="ID" property="id" jdbcType="DECIMAL" />
-		<result column="USERNAME" property="username" jdbcType="VARCHAR" />
-		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="ENABLED" property="enabled" jdbcType="BOOLEAN" />
+		<result column="ACCOUNT_EXPIRED" property="accountExpired" jdbcType="BOOLEAN" />
+		<result column="ACCOUNT_LOCKED" property="accountLocked" jdbcType="BOOLEAN" />
+		<result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR" />
+		<result column="PASSWORD_EXPIRED" property="passwordExpired" jdbcType="BOOLEAN" />
+		<result column="HASHED_PASSWORD" property="hashedPassword" jdbcType="VARCHAR" />
+		<result column="FULL_NAME" property="fullName" jdbcType="VARCHAR" />
+		<result column="PHONE" property="phone" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
 		<result column="SEX" property="sex" jdbcType="VARCHAR" />
+		<result column="BIRTH_DAY" property="birthDay" jdbcType="DATE" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		ID, USERNAME, PASSWORD, SEX
+		ID, ENABLED, ACCOUNT_EXPIRED, ACCOUNT_LOCKED, LOGIN_NAME, PASSWORD_EXPIRED, HASHED_PASSWORD,
+		FULL_NAME, PHONE, EMAIL, SEX, BIRTH_DAY
 	</sql>
 
 	<!-- 根据ID查询信息 -->
@@ -16,22 +25,22 @@
 		parameterType="java.lang.Long">
 		SELECT
 		<include refid="Base_Column_List" />
-		FROM MYTEST
+		FROM USER
 		WHERE ID = #{id,jdbcType=DECIMAL}
 	</select>
 
-	<!-- 根据ID查询信息 -->
+	<!-- 根据ID或登录名查询信息 -->
 	<select id="selectBySelective" resultMap="BaseResultMap"
 		parameterType="com.hand.demo.dto.User">
 		SELECT
 		<include refid="Base_Column_List" />
-		FROM MYTEST
+		FROM USER
 		<where>
 			<if test="id != null">
 				ID = #{id,jdbcType=DECIMAL}
 			</if>
-			<if test="username != null">
-				USERNAME = #{username,jdbcType=VARCHAR}
+			<if test="loginName != null">
+				LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
 			</if>
 		</where>
 	</select>
@@ -40,7 +49,7 @@
 	<select id="selectUsers" resultMap="BaseResultMap">
 		SELECT
 		<include refid="Base_Column_List" />
-		FROM MYTEST
+		FROM USER
 	</select>
 
 	<!-- 添加用户信息 -->
@@ -49,10 +58,11 @@
 		<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE"> -->
 		<!-- select USER_S.nextval from dual -->
 		<!-- </selectKey> -->
-		insert into MYTEST (USERNAME, PASSWORD, SEX)
+		insert into USER (ENABLED, ACCOUNT_EXPIRED, ACCOUNT_LOCKED, LOGIN_NAME, PASSWORD_EXPIRED, 
+		HASHED_PASSWORD, FULL_NAME, PHONE, EMAIL, SEX, BIRTH_DAY)
 		values
-		(#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-		#{sex,jdbcType=VARCHAR})
+		(1, 0, 0, #{loginName,jdbcType=VARCHAR}, 0, #{hashedPassword,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, 
+		#{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{birthDay,jdbcType=DATE})
 		<selectKey keyProperty="id" resultType="java.lang.Long"
 			order="AFTER">
 			select LAST_INSERT_ID()
@@ -62,14 +72,14 @@
 
 	<!-- 删除用户信息 -->
 	<delete id="deleteUser" parameterType="java.lang.Long">
-		delete from MYTEST
+		delete from USER
 		where ID
 		= #{id,jdbcType=DECIMAL}
 	</delete>
 
 	<!-- 删除用户信息 -->
 	<delete id="batchDeleteUser" parameterType="java.util.List">
-		DELETE FROM MYTEST WHERE ID IN
+		DELETE FROM USER WHERE ID IN
 		<foreach collection="list" index="index" item="item" open="("
 			separator="," close=")">
 			#{item.id,jdbcType=DECIMAL}
@@ -78,18 +88,71 @@
 
 	<!-- 更新用户信息 -->
 	<update id="updateByPrimaryKeySelective" parameterType="com.hand.demo.dto.User">
-		update MYTEST
+		update USER
 		<set>
-			<if test="username != null">
-				USERNAME = #{username,jdbcType=VARCHAR},
+		    <if test="enabled != null">
+                ENABLED = #{enabled,jdbcType=BOOLEAN},
+            </if>
+			<if test="accountExpired != null">
+				ACCOUNT_EXPIRED = #{accountExpired,jdbcType=BOOLEAN},
 			</if>
-			<if test="password != null">
-				PASSWORD = #{password,jdbcType=VARCHAR},
+			<if test="accountLocked != null">
+				ACCOUNT_LOCKED = #{accountLocked,jdbcType=BOOLEAN},
 			</if>
-			<if test="sex != null">
-				SEX = #{sex,jdbcType=VARCHAR},
+			<if test="loginName != null">
+				LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
 			</if>
+			<if test="passwordExpired != null">
+                PASSWORD_EXPIRED = #{passwordExpired,jdbcType=BOOLEAN},
+            </if>
+            <if test="fullName != null">
+                FULL_NAME = #{fullName,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                PHONE = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                EMAIL = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                SEX = #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="birthDay != null">
+                BIRTH_DAY = #{birthDay,jdbcType=DATE},
+            </if>
 		</set>
 		where ID = #{id,jdbcType=DECIMAL}
 	</update>
+
+	<!-- 更新密码 -->
+	<update id="updatePassword" parameterType="com.hand.demo.dto.User">
+		update USER
+		set
+		HASHED_PASSWORD = #{hashedPassword,jdbcType=VARCHAR}
+		where ID =
+		#{id,jdbcType=DECIMAL}
+	</update>
 </mapper>
+
+<!-- 创建表语句 -->
+<!-- CREATE TABLE `user` ( -->
+<!--   `id` int(19) NOT NULL AUTO_INCREMENT COMMENT '用户ID,PK', -->
+<!--     `version` int(19) NOT NULL DEFAULT '1' COMMENT 'version', -->
+<!--   `enabled` tinyint(1) NOT NULL DEFAULT '1' COMMENT '账户状态', -->
+<!--   `account_expired` tinyint(1) NOT NULL DEFAULT '0' COMMENT '账户失效', -->
+<!--   `account_locked` tinyint(1) NOT NULL DEFAULT '0' COMMENT '账户锁定', -->
+<!--   `login_name` varchar(20) NOT NULL COMMENT '登录名', -->
+<!--   `password_expired` tinyint(1) NOT NULL DEFAULT '0' COMMENT '密码失效', -->
+<!--   `hashed_password` varchar(240) NOT NULL COMMENT '密码(加密)', -->
+<!--   `full_name` varchar(60) NOT NULL COMMENT '用户全名', -->
+<!--   `phone` varchar(20) NOT NULL COMMENT '手机', -->
+<!--   `email` varchar(120) NOT NULL COMMENT '邮箱', -->
+<!--     `sex` varchar(6) NOT NULL COMMENT '性别', -->
+<!--     `birth_day` datetime DEFAULT NULL COMMENT '生日', -->
+<!--   `created_by` int(19) NOT NULL DEFAULT '-1' COMMENT '创建人', -->
+<!--   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间', -->
+<!--   `last_updated` timestamp NOT NULL COMMENT '最近更新时间', -->
+<!--   `updated_by` int(19) NOT NULL DEFAULT '-1' COMMENT '更新人', -->
+<!--   PRIMARY KEY (`id`), -->
+<!--   UNIQUE KEY `login_name_unique_key` (`login_name`) -->
+<!-- ) ENGINE=MyISAM DEFAULT CHARSET=utf8; -->
