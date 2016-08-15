@@ -15,3 +15,5 @@ http 元素下的 form-login 元素是用来定义表单登录信息的。
 #T02
 1.引入spring-security ---专业地
 2.log4j输出执行sql
+3.整改整个user模块并加入密码加密
+4.修改认证失败处理器
