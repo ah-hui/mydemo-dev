@@ -257,10 +257,10 @@
 					<sourceDirectory>src/main/webapp</sourceDirectory>
 					<!-- 压缩js和css文件 -->
 					<includes>
-						<include>lib/**/*.js</include>
-						<include>lib/**/*.css</include>
-						<include>resources/**/*.js</include>
-						<include>resources/**/*.css</include>
+	<!-- <include>lib/**/*.js</include> -->
+	<!-- <include>lib/**/*.css</include> -->
+	<!-- <include>resources/**/*.js</include> -->
+	<!-- <include>resources/**/*.css</include> -->
 					</includes>
 					<!-- 以下目录和文件不会被压缩 -->
 					<excludes>
