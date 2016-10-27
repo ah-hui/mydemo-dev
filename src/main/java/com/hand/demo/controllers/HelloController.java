@@ -26,4 +26,18 @@ public class HelloController {
         return model;
     }
 
+    /**
+     * 注册
+     */
+    @RequestMapping(value = "/registerUser")
+    @ResponseBody
+    public ModelAndView registerUser(@RequestParam(value = "loginName") String loginName,
+            @RequestParam(value = "email") String email, @RequestParam(value = "password") String password,
+            @RequestParam(value = "rptPassword") String rptPassword) {
+        ModelAndView model = new ModelAndView();
+        // 创建用户
+        model.setViewName("redirect:login.html");
+        return model;
+    }
+
 }

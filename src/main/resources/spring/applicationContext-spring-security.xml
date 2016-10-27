@@ -32,8 +32,11 @@
 			access="isAnonymous()" />
 		<security:intercept-url pattern="/login*"
 			access="permitAll" />
-		<security:intercept-url pattern="/**"
+		<security:intercept-url pattern="/register*"
+			access="permitAll" />
+		<security:intercept-url pattern="/**.html"
 			access="isAuthenticated()" />
+		<!-- 访问权限 end 注:此处不能匹配/**拦截,这将拦截到resources里的内容导致MIME error -->
 		<!-- 登出 -->
 		<security:logout logout-url="/logout"
 			logout-success-url="/login" invalidate-session="true" delete-cookies="JSESSIONID" />
@@ -59,7 +62,7 @@
 			ref="rememberMeAuthenticationProvider" />
 	</security:authentication-manager>
 
-    <!-- 自定义认证实现类 -->
+	<!-- 自定义认证实现类 -->
 	<bean id="customUserDetailsService" class="com.hand.demo.security.service.CustomUserDetailsService" />
 
 	<!-- 加密 -->
