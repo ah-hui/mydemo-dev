@@ -6,6 +6,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
+	<!-- 项目属性 -->
+	<properties>
+		<activiti.version>5.21.0</activiti.version>
+	</properties>
+
 	<dependencies>
 		<!-- junit -->
 		<dependency>
@@ -164,6 +169,47 @@
 			<version>1.0.2.RELEASE</version>
 		</dependency>
 
+		<!-- Activiti -->
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-engine</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-spring</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-explorer</artifactId>
+			<version>${activiti.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>vaadin</artifactId>
+					<groupId>com.vaadin</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>dcharts-widget</artifactId>
+					<groupId>org.vaadin.addons</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>activiti-simple-workflow</artifactId>
+					<groupId>org.activiti</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-modeler</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-diagram-rest</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -215,49 +261,49 @@
 			<!-- <warSourceExcludes>**/*.js,**/*.css</warSourceExcludes> -->
 			<!-- </configuration> -->
 			<!-- </plugin> -->
-			<plugin>
-				<!-- YUI Compressor Maven压缩插件 -->
-				<groupId>net.alchim31.maven</groupId>
-				<artifactId>yuicompressor-maven-plugin</artifactId>
-				<version>1.5.1</version>
-				<executions>
-					<execution>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>compress</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<!-- 读取js,css文件采用UTF-8编码 -->
-					<encoding>UTF-8</encoding>
-					<!-- 不显示js可能的错误 -->
-					<jswarn>false</jswarn>
-					<!-- 若存在已压缩的文件，会先对比源文件是否有改动 有改动便压缩，无改动就不压缩 -->
-					<force>false</force>
-					<!-- 在指定的列号后插入新行 -->
-					<linebreakpos>-1</linebreakpos>
-					<!-- 压缩之前先执行聚合文件操作 -->
-					<preProcessAggregates>true</preProcessAggregates>
-					<!-- 压缩后保存文件后缀 无后缀 -->
-					<nosuffix>true</nosuffix>
-					<!-- 源目录，即需压缩的根目录 -->
-					<sourceDirectory>src/main/webapp</sourceDirectory>
-					<!-- 压缩js和css文件 -->
-					<includes>
-						<include>lib/**/*.js</include>
-						<include>lib/**/*.css</include>
-						<include>resources/**/*.js</include>
-						<include>resources/**/*.css</include>
-					</includes>
-					<!-- 以下目录和文件不会被压缩 -->
-					<excludes>
-						<exclude>**/*.min.js</exclude>
-						<exclude>**/*.min.css</exclude>
-					</excludes>
+			<!-- <plugin> -->
+			<!-- YUI Compressor Maven压缩插件 -->
+			<!-- <groupId>net.alchim31.maven</groupId> -->
+			<!-- <artifactId>yuicompressor-maven-plugin</artifactId> -->
+			<!-- <version>1.5.1</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <phase>process-resources</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>compress</goal> -->
+			<!-- </goals> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- <configuration> -->
+			<!-- 读取js,css文件采用UTF-8编码 -->
+			<!-- <encoding>UTF-8</encoding> -->
+			<!-- 不显示js可能的错误 -->
+			<!-- <jswarn>false</jswarn> -->
+			<!-- 若存在已压缩的文件，会先对比源文件是否有改动 有改动便压缩，无改动就不压缩 -->
+			<!-- <force>false</force> -->
+			<!-- 在指定的列号后插入新行 -->
+			<!-- <linebreakpos>-1</linebreakpos> -->
+			<!-- 压缩之前先执行聚合文件操作 -->
+			<!-- <preProcessAggregates>true</preProcessAggregates> -->
+			<!-- 压缩后保存文件后缀 无后缀 -->
+			<!-- <nosuffix>true</nosuffix> -->
+			<!-- 源目录，即需压缩的根目录 -->
+			<!-- <sourceDirectory>src/main/webapp</sourceDirectory> -->
+			<!-- 压缩js和css文件 -->
+			<!-- <includes> -->
+			<!-- <include>lib/**/*.js</include> -->
+			<!-- <include>lib/**/*.css</include> -->
+			<!-- <include>resources/**/*.js</include> -->
+			<!-- <include>resources/**/*.css</include> -->
+			<!-- </includes> -->
+			<!-- 以下目录和文件不会被压缩 -->
+			<!-- <excludes> -->
+			<!-- <exclude>**/*.min.js</exclude> -->
+			<!-- <exclude>**/*.min.css</exclude> -->
+			<!-- </excludes> -->
 
-				</configuration>
-			</plugin>
+			<!-- </configuration> -->
+			<!-- </plugin> -->
 		</plugins>
 	</build>
 
