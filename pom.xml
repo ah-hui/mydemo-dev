@@ -8,7 +8,7 @@
 
 	<!-- 项目属性 -->
 	<properties>
-		<activiti.version>5.21.0</activiti.version>
+		<activiti.version>5.22.0</activiti.version>
 	</properties>
 
 	<dependencies>
