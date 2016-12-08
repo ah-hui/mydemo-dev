@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,8 @@ import com.hand.demo.service.ISysUserService;
 /**
  * @author Jessey
  */
+//@PreAuthorize("permitAll")
+@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 @Controller
 @RequestMapping(value = "/user") // 这里的RequestMapping,绑定类,可加可不加
 public class UserController {
@@ -88,6 +91,7 @@ public class UserController {
     /**
      * 查询
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @RequestMapping(value = "/select")
     @ResponseBody
     public ResponseData select(HttpServletRequest request,
@@ -102,6 +106,10 @@ public class UserController {
         result.setRows(list);
         return result;
     }
+    
+    //什么时候试试这种高端用法
+//    @RequestMapping(value = "/user/get/{id}", method = RequestMethod.GET)
+//	public String getEmployee(Locale locale, Model model,@PathVariable("id") int id) {}
 
     /**
      * 生成baseToken.

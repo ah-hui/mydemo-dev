@@ -28,6 +28,14 @@
     <section class="content">
 
       <!-- Your Page Content Here -->
+	  <h1 class="module">查</h1>
+      <div id="query" class="content"></div>
+      <div id="query1" class="content">
+      <#list users as user>
+		${user.loginName}
+	  </#list>
+	  
+      </div>
 
     </section>
     <!-- /.content -->
@@ -116,19 +124,53 @@
 
 <!-- SCRIPT-初始化 -->
 <script type="text/javascript">
+	$(function() {//DOM Load完成时
+		//全部ajax搞个头上去做csrf
+		var token = $("meta[name='_csrf']").attr("content");
+	    var header = $("meta[name='_csrf_header']").attr("content");
+	    $(document).ajaxSend(function(e, xhr, options) {
+	        xhr.setRequestHeader(header, token);
+	    });
+	    
+		$.ajax({
+			type : 'POST',
+			url : "user/select",
+			dataType : "json",
+			data : {
+	            //userId : 5//这里传userId将查询单个用户
+	        },
+			success : function(data) {
+				if (data.success) {
+					initQuery(data.rows);
+				}
+			}
+		});
+	});
+	
+	/**
+	 * 查询
+	 * @param rows 查询出的行数据
+	 */
+	function initQuery(rows) {
+		var queryDiv = $("#query");
+		for(var i=0; i<rows.length; i++){
+			var html = [];
+			html.push('<div class="item">\
+					<span>username:'+rows[i].username+'&nbsp;</span>\
+					<span>password:'+rows[i].password+'&nbsp;</span>\
+					<span>sex:'+rows[i].sex+'&nbsp;</span>\
+				</div>');
+			queryDiv.append(html.join(''));
+		}
+	}
 </script>
 
 <!-- SCRIPT -->
 <script type="text/javascript">
     //登出
-    var header = "${_csrf.headerName}";
-    var token = "${_csrf.token}";
     $("#sign-out").click(function() {
         $.ajax({
             type : "POST",
-            beforeSend : function(request) {
-                request.setRequestHeader(header, token);
-            },
             url : "/demo/logout",
             success : function(msg) {
                 // supplementary checks should be done here, but because of readability
@@ -141,5 +183,3 @@
         });
     });
 </script>
-
-

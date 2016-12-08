@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<!--   <meta name="csrf-param" content="_csrf"> -->
+<!-- <meta name="csrf-token" content="${_csrf.token}"/> -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Demo | Log in</title>

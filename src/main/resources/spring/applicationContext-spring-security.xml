@@ -35,7 +35,9 @@
 		<security:intercept-url pattern="/register*"
 			access="permitAll" />
 		<security:intercept-url pattern="/**.html"
-			access="isAuthenticated()" />
+			access="hasRole('USER') or hasRole('ADMIN') or hasRole('SALES') or hasRole('MANAGEMENT')" />
+<!-- 		<security:intercept-url pattern="/**.html" -->
+<!-- 			access="isAuthenticated()" /> -->
 		<!-- 访问权限 end 注:此处不能匹配/**拦截,这将拦截到resources里的内容导致MIME error -->
 		<!-- 登出 -->
 		<security:logout logout-url="/logout"

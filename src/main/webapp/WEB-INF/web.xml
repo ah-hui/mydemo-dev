@@ -18,9 +18,21 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	
+	<!--配置单点的登陆 结合security配置的concurrency-control -->
+<!-- 	<listener> -->
+<!-- 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class> -->
+<!-- 	</listener> -->
+	
+	<!-- session超时什么时候加入呢 -->
+<!-- 	<session-config> -->
+<!-- 		<session-timeout>1</session-timeout> -->
+<!-- 	</session-config> -->
 
 	<!-- Spring Security Filter -->
 	<!-- used for intercepting the HTTP requests and performing authentication related tasks -->
+<!-- SpringSecurity必须的filter 优先配置， -->
+<!--  让SpringSecurity先加载，防止SpringSecurity拦截失效 -->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>

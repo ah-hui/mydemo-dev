@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- Spring Security 4.0, CSRF protection -->
+<!-- jquery会利用它来填充http header. -->
+<!-- 也就是说X-CSRF-Token就是从这个meta来的 -->
+<!--     // Make sure that every Ajax request sends the CSRF token -->
+<!--     CSRFProtection: function(xhr) { -->
+<!--       var token = $('meta[name="csrf-token"]').attr('content'); -->
+<!--       if (token) xhr.setRequestHeader('X-CSRF-Token', token); -->
+<!--     }, -->
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>AdminLTE 2 | Starter</title>

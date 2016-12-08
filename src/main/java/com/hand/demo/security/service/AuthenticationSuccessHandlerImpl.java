@@ -55,19 +55,19 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         boolean isAdmin = false;
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals(SecurityRole.ROLE_USER.toString())) {
+            if (grantedAuthority.getAuthority().equals(SecurityRole.USER.toString())) {
                 isUser = true;
                 break;
-            } else if (grantedAuthority.getAuthority().equals(SecurityRole.ROLE_ADMIN.toString())) {
+            } else if (grantedAuthority.getAuthority().equals(SecurityRole.ADMIN.toString())) {
                 isAdmin = true;
                 break;
             }
         }
 
         if (isUser) {
-            return "/index.html";
+            return "/index";
         } else if (isAdmin) {
-            return "/admin.html";
+            return "/admin";
         } else {
             throw new IllegalStateException();
         }

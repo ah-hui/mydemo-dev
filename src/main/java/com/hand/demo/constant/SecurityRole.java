@@ -6,6 +6,6 @@ package com.hand.demo.constant;
  */
 public enum SecurityRole {
 
-    ROLE_USER, ROLE_ADMIN;
+    USER, ADMIN;
 
 }
