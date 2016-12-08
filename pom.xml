@@ -5,6 +5,29 @@
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
+	<name>my-demo Maven Webapp</name>
+
+	<developers>
+		<developer>
+			<id>lgh</id>
+			<name>lgh</name>
+			<email>673350601@qq.com</email>
+			<url>http://www.xxx.me</url>
+			<timezone>8</timezone>
+		</developer>
+	</developers>
+
+	<!-- 项目属性 -->
+	<properties>
+		<activiti.version>5.22.0</activiti.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+		<!-- 推荐使用oschina仓库 <repository> <id>nexus-osc</id> <url>http://maven.oschina.net/content/groups/public/</url> 
+			</repository> <repository> <id>nexus-osc-thirdparty</id> <url>http://maven.oschina.net/content/repositories/thirdparty/</url> 
+			</repository> -->
+	</repositories>
 
 	<dependencies>
 		<!-- junit -->
@@ -175,11 +198,52 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>4.1.1.RELEASE</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.security</groupId> -->
-		<!-- <artifactId>spring-security-aspects</artifactId> -->
-		<!-- <version>4.1.1.RELEASE</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>4.1.1.RELEASE</version>
+		</dependency>
+
+		<!-- Activiti -->
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-engine</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-spring</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-explorer</artifactId>
+			<version>${activiti.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>vaadin</artifactId>
+					<groupId>com.vaadin</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>dcharts-widget</artifactId>
+					<groupId>org.vaadin.addons</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>activiti-simple-workflow</artifactId>
+					<groupId>org.activiti</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-modeler</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-diagram-rest</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
 
 	</dependencies>
 
