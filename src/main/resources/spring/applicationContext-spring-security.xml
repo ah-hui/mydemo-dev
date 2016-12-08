@@ -12,14 +12,18 @@
 	<context:annotation-config />
 	<context:component-scan base-package="**.*.service" />
 
-	<!-- 这样也可以放行login界面,区别是:这种方式login.html页面将不被filter过滤 -->
-	<!-- <security:http security="none" pattern="/login*.html" /> -->
-	<security:http pattern="/css/**" security="none"></security:http>
-	<security:http pattern="/img/**" security="none"></security:http>
-	<security:http pattern="/js/**" security="none"></security:http>
-	<security:http pattern="/fonts/**" security="none"></security:http>
-
 	<security:http use-expressions="true">
+		<!-- 访问权限 -->
+		<security:intercept-url pattern="/login*"
+			access="permitAll" />
+		<security:intercept-url pattern="/register*"
+			access="permitAll" />
+		<security:intercept-url pattern="/resources/**"
+			access="permitAll" />
+		<security:intercept-url pattern="/**"
+			access="isAuthenticated()" />
+		<!-- 访问权限 end 注:登录成功即可访问/**,因为后续还会有权限控制 -->
+
 		<security:form-login login-page="/login.html" />
 		<!-- 把 usernamePasswordAuthenticationFilter 加入 FilterChain -->
 		<security:custom-filter ref="usernamePasswordAuthenticationFilter"
@@ -27,31 +31,27 @@
 		<!-- Remember Me -->
 		<security:custom-filter ref="rememberMeFilter"
 			position="REMEMBER_ME_FILTER" />
-		<!-- 访问权限 -->
-		<security:intercept-url pattern="/anonymous*"
-			access="isAnonymous()" />
-		<security:intercept-url pattern="/login*"
-			access="permitAll" />
-		<security:intercept-url pattern="/register*"
-			access="permitAll" />
-		<security:intercept-url pattern="/**.html"
-			access="hasRole('USER') or hasRole('ADMIN') or hasRole('SALES') or hasRole('MANAGEMENT')" />
-<!-- 		<security:intercept-url pattern="/**.html" -->
-<!-- 			access="isAuthenticated()" /> -->
-		<!-- 访问权限 end 注:此处不能匹配/**拦截,这将拦截到resources里的内容导致MIME error -->
 		<!-- 登出 -->
 		<security:logout logout-url="/logout"
 			logout-success-url="/login" invalidate-session="true" delete-cookies="JSESSIONID" />
 
 		<!-- 访问拒绝处理 -->
-		<!-- <security:access-denied-handler ref="accessDeniedHandler" /> -->
+		<security:access-denied-handler ref="accessDeniedHandler" />
+
+		<!-- 单点登录 -->
+		<security:session-management>
+			<security:concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>
+		</security:session-management>
 
 	</security:http>
 
-	<!-- <bean id="accessDeniedHandler" -->
-	<!-- class="org.springframework.security.web.access.AccessDeniedHandlerImpl"> -->
-	<!-- <property name="errorPage" value="/denied.jsp" /> -->
-	<!-- </bean> -->
+	<!-- 启用注解控制权限 - 必须放在dispatcher-serlet.xml里面 -->
+	<!-- <security:global-method-security pre-post-annotations="enabled" /> -->
+
+	<bean id="accessDeniedHandler"
+		class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+		<property name="errorPage" value="/denied.html" />
+	</bean>
 
 	<security:authentication-manager alias="authenticationManager">
 		<security:authentication-provider
