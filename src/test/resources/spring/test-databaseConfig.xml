@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
-
-    <context:property-placeholder location="classpath:config.properties"/> 
+    <context:property-placeholder location="classpath:testConfig.properties"/> 
     
     <bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -22,6 +25,44 @@
 		<property name="password">
 			<value>${test.db.password}</value>
 		</property>
+	</bean>
+	
+	<!-- 在使用mybatis时 spring使用sqlsessionFactoryBean 来管理mybatis的sqlsessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- mybatis配置文件路径 -->
+		<property name="configLocation" value="classpath:MyBatisConfig.xml" />
+		<!-- 实体类映射文件路径 -->
+		<property name="mapperLocations" value="classpath*:/**/*Mapper.xml" />
+	</bean>
+
+	<!-- 配置sqlsession 产生这个实例就是通过 sqlsessionTemplate来实现的 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" name="sqlSessionFactory">
+			<ref bean="sqlSessionFactory" />
+		</constructor-arg>
+	</bean>
+
+	<!-- mapper definition 代替这种方式：使用sqlsessionTemplate来进行操作 -->
+	<!--扫描**.*.mapper下的所有接口，然后创建各自接口的动态代理类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="**.*.mapper" />
+	</bean>
+
+	<!-- 事务 需要三件事才可以 一具体的事务实现 二事务管理器 三 aop 事务控制 不起作用 -->
+	<!-- 这里使用 全注释 事务 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 添加事务的控制 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- 密码加密 -->
+	<bean id="passwordManager" class="com.hand.demo.security.PasswordManager">
+		<property name="salt" value="infinitus" />
+		<property name="defaultPassword" value="111111" />
 	</bean>
 
 </beans>
