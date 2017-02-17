@@ -23,6 +23,7 @@ http 元素下的 form-login 元素是用来定义表单登录信息的。
 
 #T04
 1.引入activiti做流程，先只做了一个test用例
+2.activiti多个例子
 
 #T05
 1.计划引入plivo发送SMS短信
