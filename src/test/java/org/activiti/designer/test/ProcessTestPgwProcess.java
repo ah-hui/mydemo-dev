@@ -41,6 +41,24 @@ public class ProcessTestPgwProcess {
 		String procInstanceId = processInstance.getId();
 		String procDefinitionId = processInstance.getProcessDefinitionId();
 
+		List<Task> tasks = taskService.createTaskQuery().processInstanceId(procInstanceId).list();
+		System.out.println("1st group:");
+		for (Task task : tasks) {
+			System.out.println("Task: -name=" + task.getName());
+			variableMap.put("name", "lalallalalalalalla");
+			taskService.complete(task.getId(), variableMap);
+		}
+		
+		tasks = taskService.createTaskQuery().processInstanceId(procInstanceId).list();
+		System.out.println("2st group:");
+		for (Task task : tasks) {
+			System.out.println("Task: -name=" + task.getName());
+			taskService.complete(task.getId(), variableMap);
+		}
+		
+		//tasks = taskService.createTaskQuery().processInstanceId(procInstanceId).list();
+		
+		/*
 		// 任务-故意不完成全部任务
 		List<Task> tasks = taskService.createTaskQuery().processInstanceId(procInstanceId).list();
 		System.out.println("1st group:");
@@ -65,6 +83,7 @@ public class ProcessTestPgwProcess {
 			System.out.println("Task: -name=" + task.getName());
 			//taskService.complete(task.getId(), variableMap);
 		}
+		*/
 		
 		/*
 		// 第1组任务

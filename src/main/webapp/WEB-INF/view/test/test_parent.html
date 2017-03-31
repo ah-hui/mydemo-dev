@@ -1,0 +1,30 @@
+<!-- jQuery 2.2.4 -->
+<script src="resources/js/jquery/jquery-2.2.4.min.js"></script>
+
+<script>
+var newWin = null;//注意,应避免操作子window,因为关闭子页面后句柄不为空
+//刷新父页面会使子页面句柄丢失
+function openWin() {//打开子页面
+    window.open("test_child.html");
+	return false;
+}
+function setNewWin(w){//供子页面调用将句柄传回父页面
+	newWin = w;
+	//alert("来自新窗口的通知：新窗口打开了");
+}
+function parentAlert(msg){//供子页面在父页面alert内容
+	alert(msg);
+}
+
+function childAlert(){
+	if(newWin){
+		newWin.alert("来自父窗口的通知:alert");
+	}
+}
+</script>
+
+<h1>父页面-原窗口</h1>
+
+<a href="javascript:void(0);" target="_blank" onclick="return openWin()">打开新窗口</a><br>
+
+<a href="javascript:void(0);" onclick="childAlert()">子页面alert</a>

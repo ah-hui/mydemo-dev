@@ -1,0 +1,26 @@
+<!-- jQuery 2.2.4 -->
+<script src="resources/js/jquery/jquery-2.2.4.min.js"></script>
+
+<script>
+//var parentWin = null;//此处注意不能将父window设置给变量,否则在clickMe时(父win已关闭)此变量不为空
+//刷新将不会丢失父页面句柄-window.opener
+$(function(){
+	window.opener.setNewWin(window);//将子页面句柄暴露给父页面
+	alert("新窗口打开了");
+});
+function openWin() {
+    window.open("test_child.html");
+	return false;
+}
+function clickMe(){
+	if(window.opener){
+		window.opener.parentAlert('按钮点击了');
+	}else{
+		alert('父窗口已关闭');
+	}
+}
+</script>
+
+<h1>子页面-新窗口</h1>
+
+<button onclick="clickMe()">父窗口alert</button>
