@@ -28,7 +28,12 @@ http 元素下的 form-login 元素是用来定义表单登录信息的。
 
 #T05
 1.引入jstl标签库（简化页面编写）和spring-security标签库（这个是做权限的）
+2.receiveTask用做手动触发事件，暂时未引入因为不知道什么用
+3.加入定时任务的流程test（包含多种自动执行的测试）
 
 #T??
 1.计划引入plivo发送SMS短信
+做成可配置的，使用一个配置文件记录短信开关、token获取url、发送url、secret等
+GLOBAL.getConfig ---> HttpUtils.doPost ---> SmsTempleteUtil ---> sendMessage
+
 

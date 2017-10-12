@@ -32,7 +32,7 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
         logger.debug("saved Request: {}", savedRequest);
-        logger.warn("Authn Failure.", authenticationException);
+//        logger.warn("Authn Failure.", authenticationException);
 
         if (savedRequest != null) {
             logger.debug("Retry original request of {}", savedRequest.getRedirectUrl());

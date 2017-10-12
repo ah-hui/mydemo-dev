@@ -16,8 +16,23 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="databaseSchemaUpdate" value="true" />
-		<property name="jobExecutorActivate" value="false" />
+		<property name="jobExecutorActivate" value="true" />
+
+		<!-- 定义activiti:expression -->
+		<property name="beans">
+			<map>
+				<entry key="notifyHandler" value-ref="notifyHandler" />
+				<entry key="myHandler" value-ref="myHandler" />
+				<entry key="myHandler2" value-ref="myHandler2" />
+			</map>
+		</property>
+
 	</bean>
+
+	<!-- activiti:expression的处理方法 -->
+	<bean id="notifyHandler" class="com.hand.activiti.gateway.DelegateExpression1" />
+	<bean id="myHandler" class="com.hand.activiti.gateway.ActivitiExpression1" />
+	<bean id="myHandler2" class="com.hand.activiti.gateway.DelegateExpression2" />
 
 	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
 		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
@@ -33,6 +48,6 @@
 		factory-method="getHistoryService" />
 	<bean id="managementService" factory-bean="processEngine"
 		factory-method="getManagementService" />
-		
+
 </beans>
 

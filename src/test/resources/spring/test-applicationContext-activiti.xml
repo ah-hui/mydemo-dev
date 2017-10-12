@@ -13,10 +13,19 @@
 	<import resource="classpath:/spring/test-databaseConfig.xml" />
 
 	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<!-- 此处注意！！！如果有activiti.cfg.xml则此处beans不生效 -->
+		<!-- When you're just using the activiti.cfg.xml, the other BEANS in the XML are not exposed as beans to activiti expressions. -->
+<!-- 		<property name="beans"> -->
+<!-- 			<map> -->
+<!-- 				<entry key="delegateExpression1" value-ref="delegateExpression1" /> -->
+<!-- 				<entry key="activitiExpression1" value-ref="activitiExpression1" /> -->
+<!-- 				<entry key="delegateExpression2" value-ref="delegateExpression2" /> -->
+<!-- 			</map> -->
+<!-- 		</property> -->
 		<property name="dataSource" ref="dataSource" />
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="databaseSchemaUpdate" value="true" />
-		<property name="jobExecutorActivate" value="false" />
+		<property name="jobExecutorActivate" value="true" />
 	</bean>
 
 	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
@@ -33,6 +42,6 @@
 		factory-method="getHistoryService" />
 	<bean id="managementService" factory-bean="processEngine"
 		factory-method="getManagementService" />
-		
+
 </beans>
 

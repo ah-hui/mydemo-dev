@@ -6,5 +6,19 @@
 
 	<bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
 		<property name="databaseSchemaUpdate" value="true"/>
+		<property name="jobExecutorActivate" value="true" />
+		<!-- 定义activiti:expression -->
+		<property name="beans">
+			<map>
+				<entry key="delegateExpression1" value-ref="delegateExpression1" />
+				<entry key="activitiExpression1" value-ref="activitiExpression1" />
+				<entry key="delegateExpression2" value-ref="delegateExpression2" />
+			</map>
+		</property>
 	</bean>
+	
+	<!-- activiti:expression的处理方法 -->
+	<bean id="delegateExpression1" class="com.hand.activiti.gateway.DelegateExpression1" />
+	<bean id="activitiExpression1" class="com.hand.activiti.gateway.ActivitiExpression1" />
+	<bean id="delegateExpression2" class="com.hand.activiti.gateway.DelegateExpression2" />
 </beans>
