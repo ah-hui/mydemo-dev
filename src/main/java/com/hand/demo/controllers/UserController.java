@@ -91,7 +91,7 @@ public class UserController {
      */
     @RequestMapping(value = "/select")
     @ResponseBody
-    @PreAuthorize("hasAnyAuthority('USER')")//此处如果使用hasRole则ajax请求此处时直接403,而且不是因为csrf
+//    @PreAuthorize("hasAnyAuthority('USER')")//此处如果使用hasRole则ajax请求此处时直接403,而且不是因为csrf
     public ResponseData select(HttpServletRequest request,
             @RequestParam(value = "userId", required = false) Long userId) {
         ResponseData result = new ResponseData();

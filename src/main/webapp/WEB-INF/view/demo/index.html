@@ -1,11 +1,5 @@
-<#--
- * description: 首页界面
- * version: 1.0
- * author: guanghui.liu
- * Copyright Guang Hui. 
- *
--->
-<#include "/demo/include/header.html">
+<#-- * description: 首页界面 * version: 1.0 * author: guanghui.liu *
+Copyright Guang Hui. * --> <#include "/demo/include/header.html">
 <!-- ========== HEADER END ========== -->
 <style type="text/css">
 .module {
@@ -20,37 +14,41 @@
 </style>
 
 <div class="container">
-    <h1 class="module">welcome</h1>
-    <div id="welcome" class="content">
-        <img width="60px" height="60px" src="resources/img/对勾.jpg"
-            onerror="javascript:this.src='resources/img/60-60.png';">
-    </div>
-    <h1 class="module">查</h1>
-    <div id="query" class="content"></div>
-    <h1 class="module">增</h1>
+	<h1 class="module">welcome</h1>
+	<div id="welcome" class="content">
+		<img width="60px" height="60px" src="resources/img/对勾.jpg"
+			onerror="javascript:this.src='resources/img/60-60.png';">
+	</div>
+	<h1 class="module">查</h1>
+	<div id="query" class="content"></div>
+	<h1 class="module">增</h1>
 	<div id="insert" class="content">
 		<div class="item">
 			<label for="username">username:</label> <input type="text"
 				class="form-control" name="username" placeholder="username">
 			<label for="password">password:</label> <input type="text"
 				class="form-control" name="password" placeholder="password">
-			<label for="sex">sex:</label> <input type="text" class="form-control"
-				name="sex" placeholder="sex">
+			<label for="fullName">fullName:</label> <input type="text"
+				class="form-control" name="fullName" placeholder="fullName">
+			<label for="phone">phone:</label> <input type="text"
+				class="form-control" name="phone" placeholder="phone"> <label
+				for="email">email:</label> <input type="text" class="form-control"
+				name="email" placeholder="email"> <label for="sex">sex:</label>
+			<input type="text" class="form-control" name="sex" placeholder="sex">
 			<button onclick="initInsert(this)" type="button" class="">保存</button>
 		</div>
 	</div>
 	<h1 class="module">删</h1>
 	<div id="delete" class="content">
-		<div id="deleteList" class="content">
-		</div>
+		<div id="deleteList" class="content"></div>
 		<div id="deleteBtn" class="content">
-		    <button type="button" onclick="batchDelete()">批量删除</button>
+			<button type="button" onclick="batchDelete()">批量删除</button>
 		</div>
 	</div>
 	<h1 class="module">改</h1>
-    <div id="update" class="content" style="margin-top:-40px">
-        <p>太懒了不弄了</p>
-    </div>
+	<div id="update" class="content" style="margin-top: -40px">
+		<p>太懒了不弄了</p>
+	</div>
 </div>
 
 <!-- SCRIPT-初始化 -->
@@ -59,13 +57,19 @@
 	var conn = null;//为防止狂点确认而建立的ajax连接状态
 
 	$(function() {//DOM Load完成时
+		//全部ajax搞个头上去做csrf
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$(document).ajaxSend(function(e, xhr, options) {
+			xhr.setRequestHeader(header, token);
+		});
 		$.ajax({
 			type : 'POST',
 			url : "user/select",
 			dataType : "json",
 			data : {
-                //userId : 5//这里传userId将查询单个用户
-            },
+			//userId : 5//这里传userId将查询单个用户
+			},
 			success : function(data) {
 				if (data.success) {
 					initQuery(data.rows);
@@ -84,12 +88,17 @@
 	 */
 	function initQuery(rows) {
 		var queryDiv = $("#query");
-		for(var i=0; i<rows.length; i++){
+		for (var i = 0; i < rows.length; i++) {
 			var html = [];
 			html.push('<div class="item">\
-					<span>username:'+rows[i].username+'&nbsp;</span>\
-					<span>password:'+rows[i].password+'&nbsp;</span>\
-					<span>sex:'+rows[i].sex+'&nbsp;</span>\
+					<span>username:'
+					+ rows[i].loginName
+					+ '&nbsp;</span>\
+					<span>password:'
+					+ rows[i].hashedPassword
+					+ '&nbsp;</span>\
+					<span>sex:' + rows[i].sex
+					+ '&nbsp;</span>\
 				</div>');
 			queryDiv.append(html.join(''));
 		}
@@ -99,35 +108,40 @@
 	 * 新增
 	 * @param btn 提交btn,以便获取提交数据
 	 */
-	 function initInsert(btn){
+	function initInsert(btn) {
 		var div = $(btn).parent();
 		var username = div.find("[name='username']").val();
 		var password = div.find("[name='password']").val();
+		var fullName = div.find("[name='fullName']").val();
+		var phone = div.find("[name='phone']").val();
+		var email = div.find("[name='email']").val();
 		var sex = div.find("[name='sex']").val();
-	    if(!username || !password || !sex){
-	    	alert("请输入完整信息");
-	    	return;
-	    }
-        if (conn && conn.readyState != 4)//防止狂点发多次请求
-            return;
-        conn = $.ajax({
-            type : 'POST',
-            url : "user/insert",
-            contentType : "application/json; charset=utf-8",
-            data : JSON.stringify({
-            	username : username,
-                password : password,
-                sex : sex
-            }),
-            success : function(data) {
-                if (data.success) {
-                    alert("操作成功！");
-                    location.reload(true);
-                }
-            }
-        });
+		if (!username || !password || !sex) {
+			alert("请输入完整信息");
+			return;
+		}
+		if (conn && conn.readyState != 4)//防止狂点发多次请求
+			return;
+		conn = $.ajax({
+			type : 'POST',
+			url : "user/insert",
+			contentType : "application/json; charset=utf-8",
+			data : JSON.stringify({
+				loginName : username,
+				hashedPassword : password,
+				fullName : fullName,
+				phone : phone,
+				email : email,
+				sex : sex
+			}),
+			success : function(data) {
+				if (data.success) {
+					alert("操作成功！");
+					location.reload(true);
+				}
+			}
+		});
 	}
-	
 
 	/**
 	 * 初始化删除模块数据
@@ -137,46 +151,50 @@
 		var deleteDiv = $("#deleteList");
 		for (var i = 0; i < rows.length; i++) {
 			var html = [];
-            html.push('<label><input name="userToDelete" type="checkbox" value="'+rows[i].id+'" />'+rows[i].username+'</label>\
+			html
+					.push('<label><input name="userToDelete" type="checkbox" value="'+rows[i].id+'" />'
+							+ rows[i].username
+							+ '</label>\
             		<a href="javascript:void(0);" onclick="deleteUser($(this).prev().children().val())">删除</a><br>');
-            deleteDiv.append(html.join(''));
+			deleteDiv.append(html.join(''));
 		}
 	}
-	
+
 	/**
-     * 单条删除
-     * @param id 要删除user的pk
-     */
-    function deleteUser(id) {
-        if (conn && conn.readyState != 4)//防止狂点发多次请求
-            return;
-        conn = $.ajax({
-            type : 'POST',
-            url : "user/delete",
-            dataType : "json",
-            data : {
-                userId : id
-            },
-            success : function(data) {
-                if (data.success) {
-                    alert("操作成功！");
-                    location.reload(true);
-                }
-            }
-        });
-    }
-	
+	 * 单条删除
+	 * @param id 要删除user的pk
+	 */
+	function deleteUser(id) {
+		if (conn && conn.readyState != 4)//防止狂点发多次请求
+			return;
+		conn = $.ajax({
+			type : 'POST',
+			url : "user/delete",
+			dataType : "json",
+			data : {
+				userId : id
+			},
+			success : function(data) {
+				if (data.success) {
+					alert("操作成功！");
+					location.reload(true);
+				}
+			}
+		});
+	}
 
 	/**
 	 * 批量删除
 	 */
 	function batchDelete() {
-        if (conn && conn.readyState != 4)//防止狂点发多次请求
-            return;
+		if (conn && conn.readyState != 4)//防止狂点发多次请求
+			return;
 		var ids = getChecked();
 		var arr = [];
-		for(var i=0; i<ids.length; i++){
-			arr.push({"id":ids[i]});//传到后台时会自动类型转换
+		for (var i = 0; i < ids.length; i++) {
+			arr.push({
+				"id" : ids[i]
+			});//传到后台时会自动类型转换
 			//arr.push({"id":parseInt(ids[i])});
 		}
 		conn = $.ajax({

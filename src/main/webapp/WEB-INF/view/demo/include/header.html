@@ -5,6 +5,8 @@
 <!-- 这句规定base地址,如果有个图片src可以不写全,将自动应用base地址+src的地址 -->
 <!-- <base target="_blank" /> 这句规定本页所有链接的打开行为为打开一个新的窗口 -->
 <title>demo</title>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">

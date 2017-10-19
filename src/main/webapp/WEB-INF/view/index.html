@@ -156,8 +156,8 @@
 		for(var i=0; i<rows.length; i++){
 			var html = [];
 			html.push('<div class="item">\
-					<span>username:'+rows[i].username+'&nbsp;</span>\
-					<span>password:'+rows[i].password+'&nbsp;</span>\
+					<span>username:'+rows[i].loginName+'&nbsp;</span>\
+					<span>password:'+rows[i].hashedPassword+'&nbsp;</span>\
 					<span>sex:'+rows[i].sex+'&nbsp;</span>\
 				</div>');
 			queryDiv.append(html.join(''));

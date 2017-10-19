@@ -20,8 +20,9 @@
 			access="permitAll" />
 		<security:intercept-url pattern="/resources/**"
 			access="permitAll" />
-		<security:intercept-url pattern="/**"
-			access="isAuthenticated()" />
+		<security:intercept-url pattern="/**" access="permitAll" />
+		<!-- <security:intercept-url pattern="/**" -->
+		<!-- access="isAuthenticated()" /> -->
 		<!-- 访问权限 end 注:登录成功即可访问/**,因为后续还会有权限控制 -->
 
 		<security:form-login login-page="/login.html" />
@@ -40,7 +41,8 @@
 
 		<!-- 单点登录 -->
 		<security:session-management>
-			<security:concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>
+			<security:concurrency-control
+				max-sessions="1" error-if-maximum-exceeded="true" />
 		</security:session-management>
 
 	</security:http>

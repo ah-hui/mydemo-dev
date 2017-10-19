@@ -19,6 +19,7 @@
 
 	<!-- 项目属性 -->
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<activiti.version>5.22.0</activiti.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -30,6 +31,28 @@
 	</repositories>
 
 	<dependencies>
+		<!-- ElasticSearch -->
+		<!-- https://mvnrepository.com/artifact/fr.pilato.spring/spring-elasticsearch -->
+		<dependency>
+			<groupId>fr.pilato.spring</groupId>
+			<artifactId>spring-elasticsearch</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-elasticsearch -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-elasticsearch</artifactId>
+			<version>3.0.0.RELEASE</version>
+		</dependency>
+
+		<!-- ES dependency for query builder -->
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>5.6.2</version>
+		</dependency>
+
 		<!-- junit -->
 		<dependency>
 			<groupId>junit</groupId>

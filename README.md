@@ -1,5 +1,8 @@
 # mydemo-dev
 
+#注意
+自动化测试时，请关闭spring-security的关于权限的拦截
+
 #T01-1
 初步引入spring-security,通过配置文件分配的权限
 直接运行项目访问项目主页,或访问任意连接,将跳转到自动生成的登录页面
@@ -30,6 +33,10 @@ http 元素下的 form-login 元素是用来定义表单登录信息的。
 1.引入jstl标签库（简化页面编写）和spring-security标签库（这个是做权限的）
 2.receiveTask用做手动触发事件，暂时未引入因为不知道什么用
 3.加入定时任务的流程test（包含多种自动执行的测试）
+
+#T06
+1.修改redis配置
+2.引入ElasticSearch+Jest做全文搜索
 
 #T??
 1.计划引入plivo发送SMS短信
