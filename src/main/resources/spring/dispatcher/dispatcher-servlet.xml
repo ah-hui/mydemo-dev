@@ -96,13 +96,17 @@
 	<context:annotation-config />
 	<context:component-scan base-package="**.*.service" />
 	<context:component-scan base-package="**.*.controllers" />
+	
 	<!-- **表示匹配任意目录结构 -->
 
 	<!-- 启用注解控制权限 -->
 	<security:global-method-security
 		secured-annotations="enabled" pre-post-annotations="enabled" />
-	
+
 	<!-- redis配置注入spring -->
 	<context:component-scan base-package="com.hand.config.cache.redis" />
+	
+	<!-- 扫描要在dubbo注册而提供的api实现 -->
+	<context:component-scan base-package="dubbo" />
 
 </beans>

@@ -91,7 +91,7 @@ Copyright Guang Hui. * --> <#include "/demo/include/header.html">
 		for (var i = 0; i < rows.length; i++) {
 			var html = [];
 			html.push('<div class="item">\
-					<span>username:'
+					<span>loginName:'
 					+ rows[i].loginName
 					+ '&nbsp;</span>\
 					<span>password:'
@@ -153,7 +153,7 @@ Copyright Guang Hui. * --> <#include "/demo/include/header.html">
 			var html = [];
 			html
 					.push('<label><input name="userToDelete" type="checkbox" value="'+rows[i].id+'" />'
-							+ rows[i].username
+							+ rows[i].loginName
 							+ '</label>\
             		<a href="javascript:void(0);" onclick="deleteUser($(this).prev().children().val())">删除</a><br>');
 			deleteDiv.append(html.join(''));

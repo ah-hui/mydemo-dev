@@ -17,7 +17,7 @@ http 元素下的 form-login 元素是用来定义表单登录信息的。
 
 #T02
 1.引入spring-security ---专业地
-2.log4j输出执行sql
+2.log4j输出执行sql（mybatis）
 3.整改整个user模块并加入密码加密
 4.修改认证失败处理器
 
@@ -36,7 +36,8 @@ http 元素下的 form-login 元素是用来定义表单登录信息的。
 
 #T06
 1.修改redis配置
-2.引入ElasticSearch+Jest做全文搜索
+2.加入对dubbo的支持，升级成为服务提供方（但是如果不先启动zookeeper会无法启动项目，所以只能先关闭dubbo的配置，如果要测试dubbo，rename配置文件即可）
+3.引入ElasticSearch+Jest做全文搜索
 
 #T??
 1.计划引入plivo发送SMS短信
