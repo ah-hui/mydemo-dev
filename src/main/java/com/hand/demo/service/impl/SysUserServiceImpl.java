@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hand.annotation.SysServiceLog;
 import com.hand.demo.dto.User;
 import com.hand.demo.mapper.UserMapper;
 import com.hand.demo.security.PasswordManager;
@@ -52,20 +53,25 @@ public class SysUserServiceImpl implements ISysUserService {
      * CRUD (Create 创建，Retrieve 读取，Update 更新，Delete 删除) 操作中，除了 R
      * 具备幂等性，其他三个发生的时候都可能会造成缓存结果和数据库不一致。为了保证缓存数据的一致性，在进行 CUD
      * 操作的时候我们需要对可能影响到的缓存进行更新或者清除
+     * 
      * @Cacheable --- 对结果缓存
      * @CacheEvict --- 清楚缓存 delete
-     * @CachePut --- 更新缓存 update
-     * 如果你的 CUD 能够返回 City 实例，也可以使用 @CachePut 更新缓存策略
+     * @CachePut --- 更新缓存 update 如果你的 CUD 能够返回 City 实例，也可以使用 @CachePut 更新缓存策略
      */
 
     @Cacheable("selectUsers") // R 使用redis缓存方法执行结果
     @Override
+    @SysServiceLog(description = "查询用户") // 此处为AOP拦截Service记录异常信息。方法不需要加try-catch
     public List<User> selectUsers() {
+        // 测试service系统日志-主动抛出异常(数组下标越界)
+        // int[] arr = new int[10];
+        // arr[10] = 1;
         return userMapper.selectUsers();
     }
 
     @Cacheable("selectByPrimaryKey") // R 使用redis缓存方法执行结果
     @Override
+    @SysServiceLog(description = "查询用户")
     public User selectByPrimaryKey(Long userId) {
         return userMapper.selectByPrimaryKey(userId);
     }

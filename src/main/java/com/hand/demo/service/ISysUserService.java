@@ -32,6 +32,7 @@ public interface ISysUserService {
 
     /**
      * 查询所有user
+     * @throws Exception 
      */
     // @PreAuthorize("hasAnyAuthority('ADMIN', 'USER', 'SALES', 'MANAGEMENT')")
     List<User> selectUsers();

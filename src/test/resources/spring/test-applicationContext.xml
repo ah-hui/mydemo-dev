@@ -10,5 +10,5 @@
 	<import resource="test-applicationContext-activiti.xml" />
 	<import resource="test-databaseConfig.xml" />
 	<context:component-scan base-package="**.*.service" />
-
+	
 </beans>

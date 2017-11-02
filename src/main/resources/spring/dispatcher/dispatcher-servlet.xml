@@ -45,6 +45,18 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
+	<!-- 以静态变量保存Spring ApplicationContext -->
+	<bean id="springContextHolder" class="com.hand.util.SpringContextHolder" />
+
+	<!-- 扫描自定义注解 -->
+	<context:component-scan base-package="com.hand.annotation" />
+
+	<!-- 启动对@AspectJ注解的支持 -->
+	<aop:aspectj-autoproxy />
+
+	<!--通知spring使用cglib而不是jdk的来生成代理方法 AOP可以拦截到Controller===proxy-target-class等于true是强制使用cglib代理 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
 	<mvc:resources mapping="/lib/**" location="/lib/" />
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	<mvc:resources mapping="/js/**" location="/js/" />
@@ -96,7 +108,7 @@
 	<context:annotation-config />
 	<context:component-scan base-package="**.*.service" />
 	<context:component-scan base-package="**.*.controllers" />
-	
+
 	<!-- **表示匹配任意目录结构 -->
 
 	<!-- 启用注解控制权限 -->
@@ -105,7 +117,7 @@
 
 	<!-- redis配置注入spring -->
 	<context:component-scan base-package="com.hand.config.cache.redis" />
-	
+
 	<!-- 扫描要在dubbo注册而提供的api实现 -->
 	<context:component-scan base-package="dubbo" />
 

@@ -37,7 +37,8 @@ http 元素下的 form-login 元素是用来定义表单登录信息的。
 #T06
 1.修改redis配置
 2.加入对dubbo的支持，升级成为服务提供方（但是如果不先启动zookeeper会无法启动项目，所以只能先关闭dubbo的配置，如果要测试dubbo，rename配置文件即可）
-3.引入ElasticSearch+Jest做全文搜索
+3.SpringAOP实现日志管理
+4.引入ElasticSearch+Jest做全文搜索
 
 #T??
 1.计划引入plivo发送SMS短信

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hand.annotation.SysControllerLog;
 import com.hand.demo.constant.UserConstants;
 import com.hand.demo.dto.ResponseData;
 import com.hand.demo.dto.User;
@@ -53,11 +53,12 @@ public class UserController {
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
+    @SysControllerLog(description = "删除用户")
     public ResponseData delete(HttpServletRequest request, Long userId) {
         userService.deleteUser(userId);
         String key = generateBaseToken();
-        redisTemplate.opsForValue().set(UserConstants.REDIS_DEC_KEY_USER_DELETE + ":" + key,
-                userId.toString(), UserConstants.KEY_EXPIRE_SIXTY_MIN, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(UserConstants.REDIS_DEC_KEY_USER_DELETE + ":" + key, userId.toString(),
+                UserConstants.KEY_EXPIRE_SIXTY_MIN, TimeUnit.SECONDS);
         String uk = redisTemplate.opsForValue().get(UserConstants.REDIS_DEC_KEY_USER_DELETE + ":" + key);
         System.out.println(uk);
         return new ResponseData();
@@ -68,6 +69,7 @@ public class UserController {
      */
     @RequestMapping(value = "/batchDelete", method = RequestMethod.POST)
     @ResponseBody
+    @SysControllerLog(description = "删除用户")
     public ResponseData batchDelete(HttpServletRequest request, @RequestBody List<User> users) {
         userService.batchDeleteUser(users);
         return new ResponseData();
@@ -91,7 +93,7 @@ public class UserController {
      */
     @RequestMapping(value = "/select")
     @ResponseBody
-//    @PreAuthorize("hasAnyAuthority('USER')")//此处如果使用hasRole则ajax请求此处时直接403,而且不是因为csrf
+    // @PreAuthorize("hasAnyAuthority('USER')")//此处如果使用hasRole则ajax请求此处时直接403,而且不是因为csrf
     public ResponseData select(HttpServletRequest request,
             @RequestParam(value = "userId", required = false) Long userId) {
         ResponseData result = new ResponseData();
@@ -104,10 +106,11 @@ public class UserController {
         result.setRows(list);
         return result;
     }
-    
-    //什么时候试试这种高端用法
-//    @RequestMapping(value = "/user/get/{id}", method = RequestMethod.GET)
-//	public String getEmployee(Locale locale, Model model,@PathVariable("id") int id) {}
+
+    // 什么时候试试这种高端用法
+    // @RequestMapping(value = "/user/get/{id}", method = RequestMethod.GET)
+    // public String getEmployee(Locale locale, Model model,@PathVariable("id")
+    // int id) {}
 
     /**
      * 生成baseToken.
